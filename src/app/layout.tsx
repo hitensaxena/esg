@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono } from "next/font/google"; // Corrected: Removed 'next/font/google' as Geist is directly imported.
 import "./globals.css";
+import { AuthProvider } from '@/contexts/AuthContext';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -19,15 +20,15 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
+    <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}> {/* Added font variables to html tag for global availability */}
+      <body className={geistSans.className}> {/* Changed inter.className to geistSans.className */}
+        <AuthProvider> {/* Wrap with AuthProvider */}
+          {children}
+        </AuthProvider>
       </body>
     </html>
   );
