@@ -43,8 +43,15 @@ export default function SubmitEsgPage() {
     setSuccess('');
     setIsSubmitting(true);
 
+    // Basic validation
     if (!companyName || reportingYear === '' || carbonFootprint === '' || waterUsage === '') {
-      setError('All fields except verification status are required.');
+      setError('Please fill in all required fields');
+      setIsSubmitting(false);
+      return;
+    }
+
+    if (!user) {
+      setError('User not authenticated');
       setIsSubmitting(false);
       return;
     }
@@ -54,12 +61,10 @@ export default function SubmitEsgPage() {
         userId: user.uid,
         companyName,
         reportingYear: Number(reportingYear),
-        metrics: {
-          carbonFootprint: Number(carbonFootprint),
-          waterUsage: Number(waterUsage),
-        },
+        carbonFootprint: Number(carbonFootprint),
+        waterUsage: Number(waterUsage),
         verificationStatus,
-        createdAt: serverTimestamp(),
+        timestamp: serverTimestamp(),
       });
       setSuccess('ESG data submitted successfully!');
       setCompanyName('');

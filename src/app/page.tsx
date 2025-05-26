@@ -1,13 +1,23 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import Link from 'next/link'; // Make sure to import Link
 
 export default function HomePage() {
-  const { user, loading, logout } = useAuth();
+  const { user, loading, logout, isAdmin } = useAuth();
+  const [isClient, setIsClient] = useState(false);
 
-  if (loading) {
-    return <p className="text-center text-gray-500">Loading...</p>;
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  if (!isClient || loading) {
+    return (
+      <main className="flex min-h-screen flex-col items-center justify-center p-24 bg-gray-100">
+        <p className="text-center text-gray-500">Loading...</p>
+      </main>
+    );
   }
 
   return (
@@ -30,9 +40,22 @@ export default function HomePage() {
               <p className="m-0 max-w-[30ch] text-sm opacity-75">
                 You are logged in. You can now manage your ESG data.
               </p>
-              <Link href="/submit-esg" className="mt-4 inline-block px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700">
-                Submit ESG Data
-              </Link>
+              <div className="space-x-4">
+                <Link href="/dashboard" className="mt-4 inline-block px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700">
+                  View Dashboard
+                </Link>
+                <Link href="/submit-esg" className="mt-4 inline-block px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-md hover:bg-green-700">
+                  Submit ESG Data
+                </Link>
+                {isAdmin && (
+                  <Link 
+                    href="/admin/dashboard" 
+                    className="mt-4 inline-block px-4 py-2 text-sm font-medium text-white bg-purple-600 rounded-md hover:bg-purple-700"
+                  >
+                    Admin Dashboard
+                  </Link>
+                )}
+              </div>
               <button
                 onClick={logout}
                 className="mt-4 ml-4 inline-block px-4 py-2 text-sm font-medium text-indigo-600 bg-transparent border border-indigo-600 rounded-md hover:bg-indigo-50"

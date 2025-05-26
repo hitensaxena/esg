@@ -1,0 +1,10 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Allow read/write access to all documents for all users
+    // WARNING: This is only for development. For production, implement proper security rules.
+    match /{document=**} {
+      allow read, write: if true;
+    }
+  }
+}
